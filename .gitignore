@@ -1,0 +1,19 @@
+# Python
+venv/
+.venv/
+__pycache__/
+*.pyc
+*.pyo
+
+# Generated FAISS index (rebuilt from civilcode.pdf on first run)
+faiss_index.pkl/
+faiss_docs.pkl
+
+# Environment / secrets
+.env
+
+# OS / editor
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/

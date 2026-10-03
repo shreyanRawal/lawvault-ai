@@ -1,0 +1,9 @@
+flask
+flask-cors
+langchain
+langchain-community
+langchain-core
+langchain-ollama
+faiss-cpu
+pypdf
+docx2txt

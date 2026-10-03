@@ -1,0 +1,533 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="LawVault AI Assistant - Get instant answers to your legal questions">
+    <title>LawVault AI Assistant</title>
+    <style>
+        :root {
+            --primary-color: #1e40af;
+            --primary-light: #2563eb;
+            --accent-color: #10b981;
+            --dark-bg: #3e4349;
+            --light-bg: #f3f4f6;
+            --text-light: #ffffff;
+            --text-dark: #1f2937;
+            --message-bg-user: #e3f2fd;
+            --message-bg-bot: #f8fafc;
+            --border-color: #e2e8f0;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: var(--light-bg);
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .navbar {
+            background: var(--primary-color);
+            padding: 1rem 2rem;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .nav-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--text-light);
+            text-decoration: none;
+            font-size: 1.25rem;
+            font-weight: bold;
+        }
+
+        .back-button {
+            color: var(--text-light);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
+
+        .back-button:hover {
+            background-color: var(--primary-light);
+        }
+
+        .chat-container {
+            flex: 1;
+            max-width: 1400px;
+            margin: 2rem auto;
+            padding: 0 2rem;
+            display: grid;
+            grid-template-columns: 300px 1fr;
+            gap: 2rem;
+            height: calc(100vh - 140px);
+        }
+
+        .sidebar {
+            background: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .chat-history {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .chat-header {
+            padding: 1.5rem;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .chat-status {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.875rem;
+            color: var(--accent-color);
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            background: var(--accent-color);
+            border-radius: 50%;
+        }
+
+        .chat-messages {
+            flex: 1;
+            overflow-y: auto;
+            padding: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .message {
+            max-width: 80%;
+            padding: 1rem;
+            border-radius: 12px;
+            line-height: 1.5;
+            position: relative;
+        }
+
+        .message::before {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            width: 12px;
+            height: 12px;
+        }
+
+        .user-message {
+            background: var(--message-bg-user);
+            margin-left: auto;
+            border-bottom-right-radius: 4px;
+        }
+
+        .bot-message {
+            background: var(--message-bg-bot);
+            border-bottom-left-radius: 4px;
+        }
+
+        .message-time {
+            font-size: 0.75rem;
+            color: #64748b;
+            margin-top: 0.5rem;
+        }
+
+        .chat-input-container {
+            padding: 1.5rem;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .chat-input-wrapper {
+            display: flex;
+            gap: 1rem;
+            position: relative;
+        }
+
+        .chat-input {
+            flex: 1;
+            padding: 1rem;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            resize: none;
+            font-size: 1rem;
+            line-height: 1.5;
+            max-height: 150px;
+            transition: border-color 0.3s ease;
+        }
+
+        .chat-input:focus {
+            outline: none;
+            border-color: var(--primary-color);
+        }
+
+        .send-button {
+            background: var(--accent-color);
+            color: white;
+            border: none;
+            padding: 0 1.5rem;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .send-button:hover {
+            background: #059669;
+        }
+
+        .send-button:disabled {
+            background: #cbd5e1;
+            cursor: not-allowed;
+        }
+
+        .topic-button {
+            background: var(--light-bg);
+            border: none;
+            padding: 1rem;
+            border-radius: 8px;
+            cursor: pointer;
+            text-align: left;
+            transition: background-color 0.3s ease;
+        }
+
+        .topic-button:hover {
+            background: #e2e8f0;
+        }
+
+        .typing-indicator {
+            display: flex;
+            gap: 0.5rem;
+            padding: 0.75rem;
+            background: var(--message-bg-bot);
+            border-radius: 12px;
+            width: fit-content;
+            margin-top: 0.5rem;
+        }
+
+        .typing-dot {
+            width: 8px;
+            height: 8px;
+            background: #94a3b8;
+            border-radius: 50%;
+            animation: typingBounce 1s infinite ease-in-out;
+        }
+
+        .typing-dot:nth-child(1) { animation-delay: 0.1s; }
+        .typing-dot:nth-child(2) { animation-delay: 0.2s; }
+        .typing-dot:nth-child(3) { animation-delay: 0.3s; }
+
+        @keyframes typingBounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-5px); }
+        }
+
+        @media (max-width: 1024px) {
+            .chat-container {
+                grid-template-columns: 1fr;
+            }
+
+            .sidebar {
+                display: none;
+            }
+        }
+
+        @media (max-width: 640px) {
+            .chat-container {
+                margin: 1rem auto;
+                padding: 0 1rem;
+            }
+
+            .message {
+                max-width: 90%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="home.html" class="back-button">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M19 12H5M12 19l-7-7 7-7"/>
+                </svg>
+                Back to Home
+            </a>
+            <a href="#" class="logo">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+                </svg>
+                LawVault Assistant
+            </a>
+        </div>
+    </nav>
+
+    <main class="chat-container">
+        <aside class="sidebar">
+            <h2>Common Topics</h2>
+            <button class="topic-button">Contract Law Basics</button>
+            <button class="topic-button">Family Law Questions</button>
+            <button class="topic-button">Employment Rights</button>
+            <button class="topic-button">Property Law</button>
+            <button class="topic-button">Business Registration</button>
+            <button class="topic-button">Intellectual Property</button>
+        </aside>
+
+        <section class="chat-history">
+            <div class="chat-header">
+                <h1>Legal Assistant</h1>
+                <div class="chat-status">
+                    <span class="status-dot"></span>
+                    Online
+                </div>
+            </div>
+
+            <div class="chat-messages" id="chat-messages">
+                <div class="message bot-message">
+                    Hello! I'm your LawVault assistant. I can help you with legal information and guidance. What would you like to know about?
+                    <div class="message-time">Just now</div>
+                </div>
+            </div>
+
+            <div class="chat-input-container">
+                <div class="chat-input-wrapper">
+                    <textarea 
+                        class="chat-input" 
+                        id="message-input" 
+                        placeholder="Type your message here..."
+                        rows="1"
+                        aria-label="Chat message input"
+                    ></textarea>
+                    <button class="send-button" id="send-button" aria-label="Send message">
+                        Send
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+    const messageInput = document.getElementById('message-input');
+    const sendButton = document.getElementById('send-button');
+    const chatMessages = document.getElementById('chat-messages');
+    const topicButtons = document.querySelectorAll('.topic-button');
+
+    // Add styles for sources
+    const styles = document.createElement('style');
+    styles.textContent = `
+        .bot-sources {
+            font-size: 0.9em;
+            color: #666;
+            background: #f5f5f5;
+            border-left: 3px solid #10b981;
+            margin-top: 0.5rem;
+            padding: 0.5rem;
+        }
+    `;
+    document.head.appendChild(styles);
+
+    // Auto-resize textarea
+    messageInput.addEventListener('input', function() {
+        this.style.height = 'auto';
+        this.style.height = Math.min(this.scrollHeight, 150) + 'px';
+        sendButton.disabled = !this.value.trim();
+    });
+
+    // Send message on Enter (but new line on Shift+Enter)
+    messageInput.addEventListener('keydown', function(e) {
+        if (e.key === 'Enter' && !e.shiftKey) {
+            e.preventDefault();
+            if (this.value.trim()) sendMessage();
+        }
+    });
+
+    sendButton.addEventListener('click', function() {
+        if (messageInput.value.trim()) sendMessage();
+    });
+
+    // Topic button clicks
+    topicButtons.forEach(button => {
+        button.addEventListener('click', () => {
+            messageInput.value = `What are the   ${button.textContent} according to the law?`;
+            sendMessage();
+        });
+    });
+
+    function addMessage(text, sender) {
+        const messageDiv = document.createElement('div');
+        messageDiv.className = `message ${sender}-message`;
+        messageDiv.innerHTML = `
+            ${text}
+            <div class="message-time">${getCurrentTime()}</div>
+        `;
+        chatMessages.appendChild(messageDiv);
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+    }
+
+    function showTypingIndicator() {
+        const indicator = document.createElement('div');
+        indicator.className = 'typing-indicator';
+        indicator.innerHTML = `
+            <div class="typing-dot"></div>
+            <div class="typing-dot"></div>
+            <div class="typing-dot"></div>
+        `;
+        chatMessages.appendChild(indicator);
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+    }
+
+    function removeTypingIndicator() {
+        const indicator = document.querySelector('.typing-indicator');
+        if (indicator) {
+            indicator.remove();
+        }
+    }
+
+    function getCurrentTime() {
+        return new Date().toLocaleTimeString('en-US', {
+            hour: 'numeric',
+            minute: 'numeric',
+            hour12: true
+        });
+    }
+
+    function getBotResponse(message) {
+        // Convert message to lowercase for case-insensitive matching
+        message = message.toLowerCase();
+        
+        // Define responses for different topics
+        const responses = {
+            'contract': "Contracts are legally binding agreements between parties. The basic elements include offer, acceptance, consideration, and intention to create legal relations. What specific aspect of contract law would you like to know more about?",
+            'family law': "Family law covers matters like divorce, child custody, adoption, and domestic relations. Each jurisdiction has its own specific laws and procedures. What particular family law topic are you interested in?",
+            'employment': "Employment law protects both employees and employers, covering areas like workplace safety, discrimination, wages, and benefits. Could you specify what employment rights you'd like to learn more about?",
+            'property': "Property law encompasses real estate, personal property, and related legal rights. This includes buying/selling property, landlord-tenant relations, and property disputes. What aspect of property law interests you?",
+            'business': "Business law covers company formation, corporate governance, and commercial transactions. What specific aspect of business law would you like to know about?",
+            'intellectual': "Intellectual property law protects creations of the mind, including patents, trademarks, and copyrights. Which area interests you?"
+        };
+
+        // Check for greetings
+        if (message.includes('hello') || message.includes('hi')) {
+            return "Hello! I'm here to help you with legal information and guidance. What legal topic would you like to explore?";
+        }
+
+        // Check for topic matches
+        for (const [topic, response] of Object.entries(responses)) {
+            if (message.includes(topic)) {
+                return response;
+            }
+        }
+
+        // Default response if no specific topic is matched
+        return "I understand you're asking about legal matters. Could you please provide more specific details about your question? I can help with topics like contracts, family law, employment rights, property law, business law, or intellectual property.";
+    }
+
+    async function initializeSystem() {
+        try {
+            const response = await fetch('http://localhost:5000/api/initialize');
+            const data = await response.json();
+            if (data.status === 'success') {
+                addMessage("System initialized successfully! How can I help you?", 'bot');
+            } else {
+                addMessage("System initialization failed. Please try again later.", 'bot');
+            }
+        } catch (error) {
+            console.error('Initialization error:', error);
+            addMessage("Unable to initialize the system. Please try again later.", 'bot');
+        }
+    }
+
+    async function sendMessage() {
+        const message = messageInput.value.trim();
+        if (!message) return;
+
+        // Add user message
+        addMessage(message, 'user');
+        messageInput.value = '';
+        messageInput.style.height = 'auto';
+        sendButton.disabled = true;
+
+        // Show typing indicator
+        showTypingIndicator();
+
+        try {
+            const response = await fetch('http://localhost:5000/api/chat', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ message: message })
+            });
+
+            const data = await response.json();
+
+            if (data.status === 'success') {
+                removeTypingIndicator();
+                // Add the main answer
+                addMessage(data.response.answer, 'bot');
+                
+                // Add sources if available
+                if (data.response.sources && data.response.sources.length > 0) {
+                    let sourcesMessage = "Sources:\n";
+                    data.response.sources.forEach((source, index) => {
+                        sourcesMessage += `\nSource ${index + 1} (Page ${source.page}):\n${source.content}\n`;
+                    });
+                    addMessage(sourcesMessage, 'bot-sources');
+                }
+            } else {
+                throw new Error(data.message || 'Failed to get response');
+            }
+        } catch (error) {
+            removeTypingIndicator();
+            addMessage("I apologize, but I'm having trouble processing your request at the moment. Please try again.", 'bot');
+            console.error('Error:', error);
+        }
+
+        sendButton.disabled = false;
+    }
+
+    // Initialize the system
+    initializeSystem();
+});
+        
+    </script>
+</body>
+</html>

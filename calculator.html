@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>LawVault - Legal Calculator</title>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/3.5.0/remixicon.min.css" rel="stylesheet" />
+  <link rel="stylesheet" href="calculator.css" />
+</head>
+<body>
+  <div class="app-container">
+    <nav class="navbar">
+      <div class="nav-container">
+        <a href="home.html" class="back-button">
+          <i class="ri-arrow-left-line"></i> Back to Home
+        </a>
+        <a href="#" class="logo">
+          <i class="ri-scales-line"></i> Legal Calculator
+        </a>
+      </div>
+    </nav>
+
+    <main class="legal-calculator-main">
+      <header class="page-header">
+        <h1>Legal Calculation Tools</h1>
+        <p>Comprehensive calculators to assist with various legal and financial matters</p>
+      </header>
+
+      <section class="calculator-grid">
+        <!-- Court Fee Estimator -->
+        <div class="calculator-card">
+          <div class="calculator-icon">
+            <i class="ri-bank-line"></i>
+          </div>
+          <h3>Court Fee Estimator</h3>
+          <p>Estimate court fees for civil cases</p>
+          <button class="calculator-button" data-calculator="court-fee">Estimate Fee</button>
+        </div>
+
+        <!-- Income Tax Calculator -->
+        <div class="calculator-card">
+          <div class="calculator-icon">
+            <i class="ri-money-dollar-box-line"></i>
+          </div>
+          <h3>Income Tax Calculator</h3>
+          <p>Calculate income tax</p>
+          <button class="calculator-button" data-calculator="income-tax">Calculate Tax</button>
+        </div>
+
+        <!-- Vehicle Tax Calculator -->
+        <div class="calculator-card">
+          <div class="calculator-icon">
+            <i class="ri-car-line"></i>
+          </div>
+          <h3>Vehicle Tax Calculator</h3>
+          <p>Estimate vehicle tax based on engine size</p>
+          <button class="calculator-button" data-calculator="vehicle-tax">Calculate vehicle tax</button>
+        </div>
+
+        <!-- House Rent Tax -->
+        <div class="calculator-card">
+          <div class="calculator-icon">
+            <i class="ri-home-smile-line"></i>
+          </div>
+          <h3>House Rent Tax Calculator</h3>
+          <p>Calculate 10% tax on house rent income</p>
+          <button class="calculator-button" data-calculator="house-rent-tax">Calculate Rent Tax</button>
+        </div>
+
+        <!-- Loan EMI Calculator -->
+        <div class="calculator-card">
+          <div class="calculator-icon">
+            <i class="ri-hand-coin-line"></i>
+          </div>
+          <h3>Loan EMI Calculator</h3>
+          <p>Calculate monthly loan payments</p>
+          <button class="calculator-button" data-calculator="emi">Calculate EMI</button>
+        </div>
+
+        <!-- Gratuity Calculator -->
+        <div class="calculator-card">
+          <div class="calculator-icon">
+            <i class="ri-briefcase-line"></i>
+          </div>
+          <h3>Gratuity Calculator</h3>
+          <p>Based on labor law and years of service</p>
+          <button class="calculator-button" data-calculator="gratuity">Calculate Gratuity</button>
+        </div>
+
+    
+
+        <!-- Land Registration & Capital Gains -->
+        <div class="calculator-card">
+          <div class="calculator-icon">
+            <i class="ri-map-pin-line"></i>
+          </div>
+          <h3>Land Registration & Capital Gain Tax</h3>
+          <p>Calculate fees and taxes on land sale</p>
+          <button class="calculator-button" data-calculator="land-tax">Calculate Fees</button>
+        </div>
+
+        <!-- Company Registration Fee -->
+        <div class="calculator-card">
+          <div class="calculator-icon">
+            <i class="ri-building-line"></i>
+          </div>
+          <h3>Company Registration Fee</h3>
+          <p>Estimate Pvt. Ltd. registration cost</p>
+          <button class="calculator-button" data-calculator="company-reg-fee">Calculate Cost</button>
+        </div>
+
+  
+        <!-- Foreign Employment Compensation -->
+        <div class="calculator-card">
+          <div class="calculator-icon">
+            <i class="ri-plane-line"></i>
+          </div>
+          <h3>Foreign Employment Compensation</h3>
+          <p>Compensation for deceased migrant workers</p>
+          <button class="calculator-button" data-calculator="foreign-employment-comp">Estimate Compensation</button>
+        </div>
+
+      
+
+      </section>
+
+      <!-- Modal for Calculator Interaction -->
+      <section id="calculator-modal" class="calculator-modal">
+        <div class="modal-content">
+          <span class="close-modal">&times;</span>
+          <div id="modal-calculator-content"></div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="footer-content">
+        <p>&copy; 2024 LawVault. Legal calculations are estimates only.</p>
+        <p>Consult with a legal professional for precise advice.</p>
+      </div>
+    </footer>
+  </div>
+
+  <script src="calculator.js"></script>
+</body>
+</html>

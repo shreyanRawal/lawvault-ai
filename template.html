@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Legal Document Templates - LawVault">
+    <title>Legal Document Templates - LawVault</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/3.5.0/remixicon.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="template.css">
+</head>
+<body>
+    <div class="app-container">
+        <nav class="navbar">
+            <div class="nav-container">
+                <a href="home.html" class="back-button">
+                    <i class="ri-arrow-left-line"></i>
+                    Back to Home
+                </a>
+                <a href="#" class="logo">
+                    <i class="ri-file-text-line"></i>
+                    LawVault
+                </a>
+            </div>
+        </nav>
+        <section class="template-generator">
+            <h2>Generate or Modify a Legal Document</h2>
+            <form id="templateForm">
+                <label for="templateFile">Upload Template (PDF/DOCX/TXT):</label>
+                <input type="file" id="templateFile" name="templateFile" accept=".pdf,.docx,.txt" required>
+        
+                <label for="modificationQuery">Describe what you want to generate or change:</label>
+                <textarea id="modificationQuery" name="modificationQuery" rows="4" placeholder="e.g. Add a clause for early termination..."></textarea>
+        
+                <button type="submit">Generate Modified Document</button>
+            </form>
+        
+            <div id="generatedOutput" style="white-space: pre-wrap; margin-top: 20px;"></div>
+        </section>
+        
+        <script>
+        document.getElementById('templateForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+        
+            const fileInput = document.getElementById('templateFile');
+            const query = document.getElementById('modificationQuery').value;
+        
+            const formData = new FormData();
+            formData.append('file', fileInput.files[0]);
+            formData.append('query', query);
+        
+            const outputDiv = document.getElementById('generatedOutput');
+            outputDiv.innerText = "Processing...";
+        
+            const response = await fetch('http://localhost:5000/api/generate-template', {
+                method: 'POST',
+                body: formData
+            });
+        
+            const data = await response.json();
+            if (data.status === "success") {
+                outputDiv.innerText = data.result;
+            } else {
+                outputDiv.innerText = "Error: " + data.message;
+            }
+        });
+        </script>
+        
+
+        <main class="main-content">
+            <header class="page-header">
+                <h1>Document Templates</h1>
+                <p>Professionally crafted legal document templates for your business and personal needs.</p>
+                <div class="search-container">
+                    <input type="text" id="document-search" placeholder="Search templates...">
+                    <i class="ri-search-line"></i>
+                </div>
+            </header>
+
+            <section class="document-grid">
+                <!-- Contract Agreement -->
+                <div class="document-item" data-tags="business contract">
+                    <div class="document-icon"><i class="ri-file-contract-line"></i></div>
+                    <div class="document-content">
+                        <h3>Contract Agreement</h3>
+                        <p>A comprehensive contract template for various business dealings.</p>
+                        <div class="document-meta">
+                            <span class="doc-type">Business</span>
+                            <span class="doc-size">24 KB</span>
+                        </div>
+                        <a href="businesscontract.pdf" class="download-button" download>
+                            <i class="ri-download-line"></i> Download
+                        </a>
+                    </div>
+                </div>
+            
+                <!-- NDA -->
+                <div class="document-item" data-tags="confidentiality nda">
+                    <div class="document-icon"><i class="ri-lock-line"></i></div>
+                    <div class="document-content">
+                        <h3>Non-Disclosure Agreement</h3>
+                        <p>Protect sensitive information with our comprehensive NDA template.</p>
+                        <div class="document-meta">
+                            <span class="doc-type">Confidential</span>
+                            <span class="doc-size">18 KB</span>
+                        </div>
+                        <a href="nondisclosureContract.pdf" class="download-button" download>
+                            <i class="ri-download-line"></i> Download
+                        </a>
+                    </div>
+                </div>
+            
+                <!-- Employment Contract -->
+                <div class="document-item" data-tags="employment contract">
+                    <div class="document-icon"><i class="ri-user-3-line"></i></div>
+                    <div class="document-content">
+                        <h3>Employment Contract</h3>
+                        <p>Outline job responsibilities and compensation terms precisely.</p>
+                        <div class="document-meta">
+                            <span class="doc-type">HR</span>
+                            <span class="doc-size">22 KB</span>
+                        </div>
+                        <a href="employmentContract.pdf" class="download-button" download>
+                            <i class="ri-download-line"></i> Download
+                        </a>
+                    </div>
+                </div>
+            
+                <!-- Property Lease -->
+                <div class="document-item" data-tags="property lease">
+                    <div class="document-icon"><i class="ri-home-4-line"></i></div>
+                    <div class="document-content">
+                        <h3>Property Lease Agreement</h3>
+                        <p>Comprehensive lease terms for property rentals and agreements.</p>
+                        <div class="document-meta">
+                            <span class="doc-type">Real Estate</span>
+                            <span class="doc-size">20 KB</span>
+                        </div>
+                        <a href="propertyLease.pdf" class="download-button" download>
+                            <i class="ri-download-line"></i> Download
+                        </a>
+                    </div>
+                </div>
+            
+                <!-- Freelance Contract -->
+                <div class="document-item" data-tags="freelance contract">
+                    <div class="document-icon"><i class="ri-briefcase-line"></i></div>
+                    <div class="document-content">
+                        <h3>Freelance Contract</h3>
+                        <p>A clear agreement for freelance services and deliverables.</p>
+                        <div class="document-meta">
+                            <span class="doc-type">Freelance</span>
+                            <span class="doc-size">16 KB</span>
+                        </div>
+                        <a href="freelanceContract.pdf" class="download-button" download>
+                            <i class="ri-download-line"></i> Download
+                        </a>
+                    </div>
+                </div>
+            
+                <!-- Power of Attorney -->
+                <div class="document-item" data-tags="legal authorization power attorney">
+                    <div class="document-icon"><i class="ri-shield-user-line"></i></div>
+                    <div class="document-content">
+                        <h3>Power of Attorney</h3>
+                        <p>Legally authorize someone to act on your behalf.</p>
+                        <div class="document-meta">
+                            <span class="doc-type">Legal</span>
+                            <span class="doc-size">19 KB</span>
+                        </div>
+                        <a href="powerofattorney.pdf" class="download-button" download>
+                            <i class="ri-download-line"></i> Download
+                        </a>
+                    </div>
+                </div>
+            
+                <!-- Partnership Agreement -->
+                <div class="document-item" data-tags="business partnership">
+                    <div class="document-icon"><i class="ri-handshake-line"></i></div>
+                    <div class="document-content">
+                        <h3>Partnership Agreement</h3>
+                        <p>Establish terms between business partners.</p>
+                        <div class="document-meta">
+                            <span class="doc-type">Business</span>
+                            <span class="doc-size">21 KB</span>
+                        </div>
+                        <a href="partnershipAgreement.pdf" class="download-button" download>
+                            <i class="ri-download-line"></i> Download
+                        </a>
+                    </div>
+                </div>
+            
+                <!-- Loan Agreement -->
+                <div class="document-item" data-tags="finance loan agreement">
+                    <div class="document-icon"><i class="ri-money-dollar-circle-line"></i></div>
+                    <div class="document-content">
+                        <h3>Loan Agreement</h3>
+                        <p>Secure a loan with clear repayment terms and conditions.</p>
+                        <div class="document-meta">
+                            <span class="doc-type">Finance</span>
+                            <span class="doc-size">25 KB</span>
+                        </div>
+                        <a href="loan_agreement.pdf" class="download-button" download>
+                            <i class="ri-download-line"></i> Download
+                        </a>
+                    </div>
+                </div>
+            
+                <!-- Divorce Agreement -->
+                <div class="document-item" data-tags="family divorce agreement">
+                    <div class="document-icon"><i class="ri-emotion-unhappy-line"></i></div>
+                    <div class="document-content">
+                        <h3>Divorce Agreement</h3>
+                        <p>A fair and legal separation template with custody and asset clauses.</p>
+                        <div class="document-meta">
+                            <span class="doc-type">Family</span>
+                            <span class="doc-size">26 KB</span>
+                        </div>
+                        <a href="divorceAgreement.pdf" class="download-button" download>
+                            <i class="ri-download-line"></i> Download
+                        </a>
+                    </div>
+                </div>
+            </section>
+            
+        </main>
+
+        <footer class="site-footer">
+            <div class="footer-content">
+                <p>&copy; 2024 LawVault. All Rights Reserved.</p>
+                <nav class="footer-links">
+                    <a href="#">Privacy Policy</a>
+                    <a href="#">Terms of Service</a>
+                    <a href="#">Contact</a>
+                </nav>
+            </div>
+        </footer>
+    </div>
+
+    <script src="template.js"></script>
+</body>
+</html>
