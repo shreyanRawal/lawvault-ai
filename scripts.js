@@ -39,23 +39,38 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     // Add scroll reveal animations
-    const observerOptions = {
-        threshold: 0.2,
-        rootMargin: "0px"
+    const featureCards = document.querySelectorAll('.feature-card');
+
+    // Reveal a card and keep it visible. Without setting opacity back to 1 here,
+    // the card would revert to the inline opacity:0 below once the 1s animation
+    // ends and disappear.
+    const revealCard = (card) => {
+        if (card.dataset.revealed) return;
+        card.dataset.revealed = "true";
+        card.style.opacity = "1";
+        card.classList.add('fade-in');
     };
 
-    const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                entry.target.classList.add('fade-in');
-                observer.unobserve(entry.target);
-            }
-        });
-    }, observerOptions);
+    if ('IntersectionObserver' in window) {
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    revealCard(entry.target);
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.1, rootMargin: "0px 0px -10% 0px" });
 
-    // Observe feature cards
-    document.querySelectorAll('.feature-card').forEach(card => {
-        card.style.opacity = "0";
-        observer.observe(card);
-    });
+        featureCards.forEach(card => {
+            card.style.opacity = "0";
+            observer.observe(card);
+        });
+
+        // Safety net: never leave a card hidden if the observer misses it
+        // (small/odd viewports, fast scrolls, or the section already on screen).
+        setTimeout(() => featureCards.forEach(revealCard), 1200);
+    } else {
+        // No IntersectionObserver support: just show the cards.
+        featureCards.forEach(revealCard);
+    }
 });
